@@ -7,12 +7,14 @@ import { useEffect } from 'recharts';
 
 class PieRechartComponent extends React.Component {
 
-    COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF'];
-    pieData = [];
 
-    constructor(){
-        super()
-        this.pieData = this.getData();
+    constructor(props){
+        super(props);
+        this.state = {
+            COLORS: ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF'],
+            pieData: [],
+            DataisLoaded: false
+        };
     }
     CustomTooltip = ({ active, payload, label }) => {
         if (active) {
@@ -26,44 +28,27 @@ class PieRechartComponent extends React.Component {
         return null;
     };
 
-    // getData(){
-    //   return fetch('http://localhost:8000/MarketCap')
-    //   .then((response) => { 
-    //       return response.json().then((data) => {
-    //           // console.log(data);
-    //           return data;
-    //       }).catch((err) => {
-    //           console.log(err);
-    //       }) 
-    //   });
-    // }
-    async getData(){
-        let obj;
-        const res = await fetch('http://localhost:8000/MarketCap')
-        obj = await res.json();
-        console.log(obj)
-        return obj;
+    componentDidMount() {
+        fetch('http://localhost:8000/MarketCap')
+            .then((res) => res.json())
+            .then((json) => { 
+                this.setState({
+                    pieData: json,
+                    DataisLoaded: true
+                });
+            })
     }
 
-
-    // getData(){
-    //     console.log("Heeeelo getData Läuft");
-    //     var requestdata = [];
-    //     fetch('http://localhost:8000/MarketCap')
-    //       .then(response => response.json())
-    //       // .then(data => requestdata = [Object.entries(data)]);
-    //       .then(data => this.pieData.push(data));
-    //     // console.log(requestdata);
-    //     // this.pieData = requestdata;
-    // }
-
     render() {
-        console.log(this.pieData);
+        const { DataisLoaded, pieData, COLORS } = this.state;
+        console.log(pieData);
+        if (!DataisLoaded) return <div>
+            <h1> Please wait some time.... </h1> </div> ;
         return (
             <PieChart width={730} height={300}>
-                <Pie data={this.pieData} color="#000000" dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={120} fill="#8884d8" >
+                <Pie data={pieData} color="#000000" dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={120} fill="#8884d8" >
                     {
-                        this.pieData.map((entry, index) => <Cell key={`cell-${index}`} fill={this.COLORS[index % this.COLORS.length]} />)
+                        pieData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)
                     }
                 </Pie>
                 <Tooltip content={<this.CustomTooltip />} />
