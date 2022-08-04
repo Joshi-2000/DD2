@@ -1,82 +1,95 @@
-//this line imports react functionality 
-import React from 'react';
-import { useEffect, useState } from "react";
-import { LineChart, Line, Tooltip } from 'recharts';
+import {useEffect, useState, button} from 'react';
+import styled from "styled-components";
 
 
-function CustomTooltip(props) {
-    var price = ""
-    var date = ""
-    console.log(props)
+import{
+    AreaChart,
+    Area,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+  } from 'recharts';
 
-    if (props.data[props.label]) {
-        price = props.data[props.label]["1. open"]
-        date = props.data[props.label]["date"]
-    }
+export default function LineGraph() {
+    const [data, setData] = useState(null);
+    const [dData, setdData] = useState(null);
+    const [wData, setwData] = useState(null);
+    const [mData, setmData] = useState(null);
+    const [yData, setyData] = useState(null);
+    
 
-
-
-    return (
-        <div>
-            <div >{date} </div>
-            <div style={{ color: "rgb(0,200,5)"}}> $ {price}</div>
-            
-        </div>
-    )
-
-}
-
-
-export default function App() {
-    const [error, setError] = useState(null);
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [items, setItems] = useState([]);
-    const data = [];
-    // Note: the empty deps array [] means
-    // this useEffect will run once
-    // similar to componentDidMount()
     useEffect(() => {
-        fetch("http://localhost:8000/MarketCap")
-            .then(res => res.json())
-            .then(
-                (result) => {
-                   
-                    data.push(result)
-                       
-
-                    
-                    //var isArray = Array.isArray(data);
-                    setItems(data.reverse())
-                 
-
-                },
-
-                // Note: it's important to handle errors here
-                // instead of a catch() block so that we don't swallow
-                // exceptions from actual bugs in components.
-                (error) => {
-                    setIsLoaded(true);
-                    setError(error);
-                }
-            )
-
-            
+        const fetchdData = async () => {
+            const result = await fetch("http://localhost:8000/Coin/d/BTC");
+            const jsonResult = await result.json();
+            setdData(jsonResult);
+        }
+        fetchdData();
+        const fetchwData = async () => {
+            const result = await fetch("http://localhost:8000/Coin/w/BTC");
+            const jsonResult = await result.json();
+            setwData(jsonResult);
+            setData(jsonResult);
+        }
+        fetchwData();
+        const fetchmData = async () => {
+            const result = await fetch("http://localhost:8000/Coin/m/BTC");
+            const jsonResult = await result.json();
+            setmData(jsonResult);
+        }
+        fetchmData();
+        const fetchyData = async () => {
+            const result = await fetch("http://localhost:8000/Coin/y/BTC");
+            const jsonResult = await result.json();
+            setyData(jsonResult);
+        }
+        fetchyData();
+        
     }, [])
-
-
-
-
+    function changeTo(res){
+      if ( res == "d"){
+        setData(dData)
+      }
+      if ( res == "w"){
+        setData(wData)
+      }
+      if ( res == "m"){
+        setData(mData)
+      }
+      if ( res == "y"){
+        setData(yData)
+      }
+    }
     return (
-        <div>
-
-            <LineChart width={500} height={250} margin={{ top: 150, right: 30, left: 20, bottom: 5 }} data={items}>
-
-                        <Line dot={false}  type="monotone" dataKey="1. open" stroke="rgb(0,200,5)" yAxisId="100" />
-                       <Tooltip content={<CustomTooltip data={items} />} />
-                        
-                    </LineChart>
-                  
+        <div width="100%">
+        <div display="flex" justify-content="flex-end" >
+        <button margin ="10px" onClick={() => changeTo("d")}>Day</button>
+        <button onClick={() => changeTo("w")}>Week</button>
+        <button onClick={() => changeTo("m")}>Month</button>
+        <button onClick={() => changeTo("y")}>Year</button>
+        </div>
+        <ResponsiveContainer width="100%" height={400}>
+            <AreaChart data = {data}>
+                <defs>
+                    <linearGradient id="color" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor='#4F465E' stopOpacity={0.9}></stop>
+                        <stop offset="75%" stopColor='#4F465E' stopOpacity={0.25}></stop>
+                    </linearGradient>
+                </defs>
                 
+                <Area dataKey= "price" stroke="#4F465E" fill='url(#color)' />
+                <XAxis dataKey="last_updated" />
+
+                <YAxis dataKey= "price" domain={['auto', 'auto']} tickCount= {8} tickFormatter={(number) => `${number}€`}/>
+
+
+                <Tooltip/>
+                <CartesianGrid opacity={0.9}/>
+            </AreaChart>
+        </ResponsiveContainer>
         </div>
     )
-}
+   
+} 

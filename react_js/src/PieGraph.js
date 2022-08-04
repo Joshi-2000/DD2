@@ -2,7 +2,6 @@
 
 import React from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
-import { useEffect } from 'recharts';
 
 
 class PieRechartComponent extends React.Component {
@@ -11,7 +10,7 @@ class PieRechartComponent extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            COLORS: ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF'],
+            COLORS: ['#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080', '#000000'],
             pieData: [],
             DataisLoaded: false
         };
@@ -24,7 +23,6 @@ class PieRechartComponent extends React.Component {
                 </div>
             );
         }
-
         return null;
     };
 
