@@ -1,0 +1,20 @@
+.headline-center{
+    font-family: sans-serif;
+    text-align: center;
+    font-size: 25pt;
+    padding: 0px;
+    margin: 0px 0px 0px 0px;
+    color:#9cb4b2
+}
+.headline{
+    padding: 0px;
+    margin: 0px auto 0px 60px;
+    font-family: sans-serif;
+    font-size: 25pt;
+    color:#9cb4b2;
+}
+.text{
+    font-family: sans-serif;
+    font-size: 16pt;
+    color:#8AA6A3;
+}

@@ -20,7 +20,7 @@ app.add_middleware(
 )
 
 
-connPool = ConnectionPool(conninfo= "host=91.18.177.109 dbname=Crypto user=pgsql password=example")
+connPool = ConnectionPool(conninfo= "host=87.146.94.122 dbname=Crypto user=pgsql password=example")
 
 @app.get("/Overview/")
 def Overview(abbr: str = "all"):
@@ -44,11 +44,20 @@ def Overview(abbr: str = "all"):
     
 @app.get("/names")
 def Names():
-    coin_dict = Overview()
+    coin_dict = Overview("all")
     names_dict = {}
     for coin in coin_dict.keys():
         names_dict[coin]=coin_dict[coin]["name"]
     return names_dict
+
+@app.get("/datanames")
+def Datanames():
+    coin_dict = Overview("all")
+    names = []
+    for coin in coin_dict.keys():
+        names.append({"fullname": coin_dict[coin]["name"]})
+        names.append({"abbr":coin})
+    return names
 
 
 #last_updated, price, volume_24h, market_cap_dominance, circulating_supply
@@ -57,6 +66,8 @@ def Names():
 def Coin(abbr: str, interval: str):
     conn = connPool.getconn()
     cur = conn.cursor()
+    cur.execute("SELECT name FROM cryptocurrency WHERE symbol = %s ", (abbr,))
+    name = cur.fetchall()[0][0]
     if interval == "d":
         cur.execute("SELECT crypto_tsd.last_updated, crypto_tsd.price, crypto_tsd.volume_24h, crypto_tsd.market_cap_dominance, crypto_tsd.circulating_supply FROM crypto_tsd INNER JOIN cryptocurrency ON crypto_tsd.crypto_id = Cryptocurrency.crypto_id WHERE Cryptocurrency.symbol = %s AND crypto_tsd.last_updated >= NOW() - '1 day'::INTERVAL ORDER BY crypto_tsd.last_updated", (abbr,))
     elif interval == "w":
@@ -82,7 +93,7 @@ def Coin(abbr: str, interval: str):
     if interval == "d":
         for data in coinData:
             coin_list.append({"last_updated": data[0].strftime("%d.%m %H:%M"), "price":data[1], "volume_24h":data[2], "market_cap_dominance":data[3], "circulating_supply":data[4]})
-    return coin_list
+    return {"overview": {"symbol": abbr, "name": name} ,"data":coin_list}
 
 @app.get("/MarketCap")
 def MarketCap():
@@ -92,7 +103,7 @@ def MarketCap():
     capData=cur.fetchall()
     connPool.putconn(conn)
     sorted_by_second = sorted(capData, key=lambda tup: tup[1], reverse=True)
-    capData = sorted_by_second[:20]
+    capData = sorted_by_second[:11]
     cap_list=[]
     cap_count = 0
     for cap in capData:
@@ -100,3 +111,58 @@ def MarketCap():
         cap_count += cap[1]
     cap_list.append({"name":"Others", "value": round(100-cap_count,4)})
     return cap_list
+
+@app.get("/OverallMarketCap")
+def OverallMarketCap():
+    conn = connPool.getconn()
+    cur = conn.cursor()
+    cur.execute("WITH Dist AS (SELECT cryptocurrency.symbol AS symbol, DATE_TRUNC('day', crypto_tsd.last_updated) AS date, AVG(crypto_tsd.circulating_supply*crypto_tsd.price) AS market_cap FROM crypto_tsd INNER JOIN cryptocurrency ON crypto_tsd.crypto_id = Cryptocurrency.crypto_id GROUP BY symbol, date) SELECT date, SUM(market_cap) FROM Dist GROUP BY date ORDER BY date")
+    capData=cur.fetchall()
+    connPool.putconn(conn)
+    cap_list = []
+    for cap in capData:
+        cap_list.append({"last_updated":cap[0].strftime("%d.%m.%Y"), "market_cap":round(cap[1],-9)/(1*10**9)})
+    return cap_list
+
+@app.get("/BestCoin")
+def BestCoin():
+    conn = connPool.getconn()
+    cur = conn.cursor()
+    cur.execute("SELECT cryptocurrency.symbol, crypto_tsd.price FROM crypto_tsd INNER JOIN cryptocurrency ON crypto_tsd.crypto_id = Cryptocurrency.crypto_id ORDER BY crypto_tsd.last_updated DESC LIMIT 100")
+    newData=cur.fetchall()
+    sorted_new = sorted(newData, key=lambda tup: tup[0])
+    cur.execute("SELECT cryptocurrency.symbol, crypto_tsd.price FROM crypto_tsd INNER JOIN cryptocurrency ON crypto_tsd.crypto_id = Cryptocurrency.crypto_id WHERE crypto_tsd.last_updated >= NOW() - '1 day'::INTERVAL ORDER BY crypto_tsd.last_updated LIMIT 100")
+    oldData=cur.fetchall()
+    sorted_old = sorted(oldData, key=lambda tup: tup[0])
+    connPool.putconn(conn)
+    max = [0,""]
+    for i in range(len(newData)):
+        increase = sorted_new[i][1]/sorted_old[i][1]
+        if increase > max[0]:
+            max = [increase, sorted_new[i][0]]
+    response = Coin(max[1], "d")
+    response["overview"]["increase"] = round((max[0] -1) *100,2)
+    return response
+
+@app.get("/WorstCoin")
+def WorstCoin():
+    conn = connPool.getconn()
+    cur = conn.cursor()
+    cur.execute("SELECT cryptocurrency.symbol, crypto_tsd.price, crypto_tsd.last_updated FROM crypto_tsd INNER JOIN cryptocurrency ON crypto_tsd.crypto_id = Cryptocurrency.crypto_id ORDER BY crypto_tsd.last_updated DESC LIMIT 100")
+    newData=cur.fetchall()
+    sorted_new = sorted(newData, key=lambda tup: tup[0])
+    cur.execute("SELECT cryptocurrency.symbol, crypto_tsd.price, crypto_tsd.last_updated FROM crypto_tsd INNER JOIN cryptocurrency ON crypto_tsd.crypto_id = Cryptocurrency.crypto_id WHERE crypto_tsd.last_updated >= NOW() - '1 day'::INTERVAL ORDER BY crypto_tsd.last_updated LIMIT 100")
+    oldData=cur.fetchall()
+    sorted_old = sorted(oldData, key=lambda tup: tup[0])
+    connPool.putconn(conn)
+    min = [2,""]
+    for i in range(len(newData)):
+        increase = sorted_new[i][1]/sorted_old[i][1]
+        if increase < min[0]:
+            min = [increase, sorted_new[i][0]]
+    response = Coin(min[1], "d")
+    response["overview"]["increase"] = round((min[0] -1) *100,2)
+    return response
+
+  
+        
