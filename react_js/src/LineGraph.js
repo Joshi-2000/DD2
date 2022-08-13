@@ -46,63 +46,47 @@ const types = ['Day', 'Week', 'Month', 'Year'];
 
 const LineGraph = (props) => {
     const [data, setData] = useState(null);
-    const [dData, setdData] = useState(null);
-    const [wData, setwData] = useState(null);
-    const [mData, setmData] = useState(null);
-    const [yData, setyData] = useState(null);
-
+    const [reData, setreData] = useState(null);
     
     const [active, setActive] = useState(types[1]);
 
     useEffect(() => {
         const fetchdData = async () => {
-            const result = await fetch("http://localhost:8000/Coin/d/" + props.Coin);
+            const result = await fetch("http://localhost:8000" + props.reqPath);
             const jsonResult = await result.json();
-            setdData(jsonResult);
-        }
+            if (Object.keys(jsonResult.data).length == 4){
+              setData(jsonResult.data.week);
+            }
+            else{
+              setData(jsonResult.data.tsd);
+            }
+            setreData(jsonResult);
+        };
         fetchdData();
-        const fetchwData = async () => {
-            const result = await fetch("http://localhost:8000/Coin/w/" + props.Coin);
-            const jsonResult = await result.json();
-            setwData(jsonResult);
-            setData(jsonResult);
-        }
-        fetchwData();
-        const fetchmData = async () => {
-            const result = await fetch("http://localhost:8000/Coin/m/"  + props.Coin);
-            const jsonResult = await result.json();
-            setmData(jsonResult);
-        }
-        fetchmData();
-        const fetchyData = async () => {
-            const result = await fetch("http://localhost:8000/Coin/y/" + props.Coin);
-            const jsonResult = await result.json();
-            setyData(jsonResult);
-        }
-        fetchyData();
         
     }, []);
     
     function changeTo(res){
       if ( res === "Day"){
-        setData(dData)
+        setData(reData.data.day)
       }
       if ( res === "Week"){
-        setData(wData)
+        setData(reData.data.week)
       }
       if ( res === "Month"){
-        setData(mData)
+        setData(reData.data.month)
       }
       if ( res === "Year"){
-        setData(yData)
+        setData(reData.data.year)
       }
     }
     if (data == undefined) return <div>
             <h1> Please wait some time.... </h1> </div> ;
+    if(Object.keys(reData.data).length == 4){
     return (
         <div >
         <ButtonGroup>
-          <p class="headline">{props.Coin}</p>
+          <p class="headline">{reData.overview.displayed_str}</p>
           {types.map(type => (
             <ButtonToggle
               key={type}
@@ -117,7 +101,7 @@ const LineGraph = (props) => {
 
 
         <ResponsiveContainer height={400} >
-            <AreaChart data = {data.data}>
+            <AreaChart data = {data}>
                 <defs>
                     <linearGradient id="color" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="0%" stopColor='#00858e' stopOpacity={0.9}></stop>
@@ -128,7 +112,7 @@ const LineGraph = (props) => {
                 <Area dataKey= "price" stroke="#00b497" fill='url(#color)' />
                 <XAxis minTickGap={20} dataKey="last_updated" tick={{fill: '#94A6A6', fontFamily: 'sans-serif'}} />
 
-                <YAxis dataKey= "price"  tick={{fill: '#94A6A6', fontFamily: 'sans-serif'}} domain={['auto', 'auto']} tickCount= {7} tickFormatter={(number) => `${number}€`}/>
+                <YAxis dataKey= "price"  tick={{fill: '#94A6A6', fontFamily: 'sans-serif'}} domain={['auto', 'auto']} tickCount= {7} tickFormatter={(number) => `${(number + reData.overview.unit)}`}/>
 
 
                 <Tooltip/>
@@ -137,6 +121,36 @@ const LineGraph = (props) => {
         </ResponsiveContainer>
         </div>
     )
+    }
+    else{
+      return (
+        <div >
+        <ButtonGroup>
+          <p class="headline">{reData.overview.displayed_str}</p>
+        </ButtonGroup>
+
+        <ResponsiveContainer height={400} >
+            <AreaChart data = {data}>
+                <defs>
+                    <linearGradient id="color" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor='#00858e' stopOpacity={0.9}></stop>
+                        <stop offset="75%" stopColor='#225769' stopOpacity={0.4}></stop>
+                    </linearGradient>
+                </defs>
+                
+                <Area dataKey= "value" stroke="#00b497" fill='url(#color)' />
+                <XAxis minTickGap={20} dataKey="last_updated" tick={{fill: '#94A6A6', fontFamily: 'sans-serif'}} />
+
+                <YAxis dataKey= "value" width={65} tick={{fill: '#94A6A6', fontFamily: 'sans-serif'}} domain={['auto', 'auto']} tickCount= {7} tickFormatter={(number) => `${number + reData.overview.unit}`}/>
+
+
+                <Tooltip/>
+                <CartesianGrid opacity={0.2}/>
+            </AreaChart>
+        </ResponsiveContainer>
+        </div>
+    )
+    }
    
 } 
 

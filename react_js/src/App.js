@@ -13,14 +13,19 @@ function App() {
           <PieGraph/>
         </div>
         <div style={{border: "3px solid #1C4356", borderRadius: "9px", width:"43%", marginLeft:"1%", marginTop: "2vh", padding:"1%", marginBottom: "2vh",}}>
-          <p class="headline-center">General information</p>
-          <p class= "text">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+          <LineGraph reqPath="/OverallMarketCap"/>
         </div>
         <div style={{width: "43%", marginLeft: "3%", marginRight: "1%",  padding: "1%",border: "3px solid #1C4356", borderRadius: "9px"}}>
-          <LineGraph Coin="BTC"/>
+          <LineGraph reqPath="/BestCoin"/>
         </div>
         <div style={{width: "43%", marginLeft: "1%", marginRight: "3%",  padding: "1%",border: "3px solid #1C4356", borderRadius: "9px"}}>
-          <LineGraph Coin="ETH"/>
+          <LineGraph reqPath="/WorstCoin"/>
+        </div>
+        <div style={{width: "43%", marginLeft: "3%", marginRight: "1%",  padding: "1%",border: "3px solid #1C4356", borderRadius: "9px"}}>
+          <LineGraph reqPath="/Coin/BTC"/>
+        </div>
+        <div style={{width: "43%", marginLeft: "1%", marginRight: "3%",  padding: "1%",border: "3px solid #1C4356", borderRadius: "9px"}}>
+          <LineGraph reqPath="/Coin/ETH"/>
         </div>
         
       </div>
