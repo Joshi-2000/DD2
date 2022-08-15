@@ -43,7 +43,7 @@ def Overview(abbr: str = "all"):
             raise HTTPException(status_code=404, detail="Abbreviation not found")
         connPool.putconn(conn)
         coinData = coinData[0]
-        return  {"coin_id":coinData[0], "name":coinData[1], "date_added":coinData[2].isoformat(), "max_supply":coinData[3], "last_updated":coinData[4], "price":coinData[5], "volume_24h":coinData[6], "market_cap_dominance":coinData[7], "circulating_supply":coinData[8]}
+        return  {"coin_id":coinData[0], "name":coinData[1], "date_added":coinData[2].isoformat(), "max_supply":coinData[3], "last_updated":coinData[4], "price":round(coinData[5],12), "volume_24h":coinData[6], "market_cap_dominance":coinData[7], "circulating_supply":coinData[8]}
     
 @app.get("/names")
 def Names():

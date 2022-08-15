@@ -15,7 +15,7 @@ export default function DetailPage() {
         coin  = mappingList[location];
     }
     else{
-        coin = location;
+        coin = location.toUpperCase();
     }
 
     const navigate = useNavigate();

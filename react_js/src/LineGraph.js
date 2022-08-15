@@ -133,7 +133,7 @@ const LineGraph = (props) => {
                 <Area dataKey= {varType} stroke="#00b497" fill='url(#color)' />
                 <XAxis minTickGap={20} dataKey="last_updated" tick={{fill: '#94A6A6', fontFamily: 'sans-serif'}} />
 
-                <YAxis dataKey= {varType}  width={100} tick={{fill: '#94A6A6', fontFamily: 'sans-serif'}} domain={['auto', 'auto']} tickCount= {7} tickFormatter={(number) => `${(number + (varType === "price" ? "€" : varType === "volume_24h" ? "m": "%"))}`}/>
+                <YAxis dataKey= {varType}  width={100} tick={{fill: '#94A6A6', fontFamily: 'sans-serif'}} domain={['auto', 'auto']} tickCount= {7} tickFormatter={(number) => `${(number + (varType === "price" ? "€" : varType === "volume_24h" ? "m€": "%"))}`}/>
 
 
                 <Tooltip/>
