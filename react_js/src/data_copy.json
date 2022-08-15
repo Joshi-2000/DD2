@@ -3,594 +3,600 @@
       "fullname": "Bitcoin"
     },
     {
-      "fullname": "BTC"
+      "abbr": "BTC"
     },
     {
       "fullname": "Ethereum"
     },
     {
-      "fullname": "ETH"
+      "abbr": "ETH"
     },
     {
       "fullname": "Tether"
     },
     {
-      "fullname": "USDT"
+      "abbr": "USDT"
     },
     {
       "fullname": "USD Coin"
     },
     {
-      "fullname": "USDC"
+      "abbr": "USDC"
     },
     {
       "fullname": "BNB"
     },
     {
+      "abbr": "BNB"
+    },
+    {
       "fullname": "Binance USD"
     },
     {
-      "fullname": "BUSD"
+      "abbr": "BUSD"
     },
     {
       "fullname": "XRP"
     },
     {
-      "fullname": "XRP"
+      "abbr": "XRP"
     },
     {
       "fullname": "Cardano"
     },
     {
-      "fullname": "ADA"
+      "abbr": "ADA"
     },
     {
       "fullname": "Solana"
     },
     {
-      "fullname": "SOL"
+      "abbr": "SOL"
     },
     {
       "fullname": "Dogecoin"
     },
     {
-      "fullname": "DOGE"
+      "abbr": "DOGE"
     },
     {
       "fullname": "Polkadot"
     },
     {
-      "fullname": "DOT"
+      "abbr": "DOT"
     },
     {
       "fullname": "Dai"
     },
     {
-      "fullname": "DAI"
+      "abbr": "DAI"
     },
     {
       "fullname": "TRON"
     },
     {
-      "fullname": "TRX"
+      "abbr": "TRX"
     },
     {
       "fullname": "Shiba Inu"
     },
     {
-      "fullname": "SHIB"
+      "abbr": "SHIB"
     },
     {
       "fullname": "Avalanche"
     },
     {
-      "fullname": "AVAX"
+      "abbr": "AVAX"
     },
     {
       "fullname": "UNUS SED LEO"
     },
     {
-      "fullname": "LEO"
+      "abbr": "LEO"
     },
     {
       "fullname": "Wrapped Bitcoin"
     },
     {
-      "fullname": "WBTC"
+      "abbr": "WBTC"
     },
     {
       "fullname": "Polygon"
     },
     {
-      "fullname": "MATIC"
+      "abbr": "MATIC"
     },
     {
       "fullname": "Uniswap"
     },
     {
-      "fullname": "UNI"
+      "abbr": "UNI"
     },
     {
       "fullname": "Litecoin"
     },
     {
-      "fullname": "LTC"
+      "abbr": "LTC"
     },
     {
       "fullname": "FTX Token"
     },
     {
-      "fullname": "FTT"
+      "abbr": "FTT"
     },
     {
       "fullname": "Cronos"
     },
     {
-      "fullname": "CRO"
+      "abbr": "CRO"
     },
     {
       "fullname": "Chainlink"
     },
     {
-      "fullname": "LINK"
+      "abbr": "LINK"
     },
     {
       "fullname": "Stellar"
     },
     {
-      "fullname": "XLM"
+      "abbr": "XLM"
     },
     {
       "fullname": "NEAR Protocol"
     },
     {
-      "fullname": "NEAR"
+      "abbr": "NEAR"
     },
     {
       "fullname": "Cosmos"
     },
     {
-      "fullname": "ATOM"
+      "abbr": "ATOM"
     },
     {
       "fullname": "Monero"
     },
     {
-      "fullname": "XMR"
+      "abbr": "XMR"
     },
     {
       "fullname": "Algorand"
     },
     {
-      "fullname": "ALGO"
+      "abbr": "ALGO"
     },
     {
       "fullname": "Ethereum Classic"
     },
     {
-      "fullname": "ETC"
+      "abbr": "ETC"
     },
     {
       "fullname": "Bitcoin Cash"
     },
     {
-      "fullname": "BCH"
+      "abbr": "BCH"
     },
     {
       "fullname": "VeChain"
     },
     {
-      "fullname": "VET"
+      "abbr": "VET"
     },
     {
       "fullname": "Decentraland"
     },
     {
-      "fullname": "MANA"
+      "abbr": "MANA"
     },
     {
       "fullname": "Flow"
     },
     {
-      "fullname": "FLOW"
+      "abbr": "FLOW"
     },
     {
       "fullname": "The Sandbox"
     },
     {
-      "fullname": "SAND"
+      "abbr": "SAND"
     },
     {
       "fullname": "Hedera"
     },
     {
-      "fullname": "HBAR"
+      "abbr": "HBAR"
     },
     {
       "fullname": "ApeCoin"
     },
     {
-      "fullname": "APE"
+      "abbr": "APE"
     },
     {
       "fullname": "Internet Computer"
     },
     {
-      "fullname": "ICP"
+      "abbr": "ICP"
     },
     {
       "fullname": "Tezos"
     },
     {
-      "fullname": "XTZ"
+      "abbr": "XTZ"
     },
     {
       "fullname": "Theta Network"
     },
     {
-      "fullname": "THETA"
+      "abbr": "THETA"
     },
     {
       "fullname": "Filecoin"
     },
     {
-      "fullname": "FIL"
+      "abbr": "FIL"
     },
     {
       "fullname": "Axie Infinity"
     },
     {
-      "fullname": "AXS"
+      "abbr": "AXS"
     },
     {
       "fullname": "Helium"
     },
     {
-      "fullname": "HNT"
+      "abbr": "HNT"
     },
     {
       "fullname": "Elrond"
     },
     {
-      "fullname": "EGLD"
+      "abbr": "EGLD"
     },
     {
       "fullname": "TrueUSD"
     },
     {
-      "fullname": "TUSD"
+      "abbr": "TUSD"
     },
     {
       "fullname": "Bitcoin SV"
     },
     {
-      "fullname": "BSV"
+      "abbr": "BSV"
     },
     {
       "fullname": "KuCoin Token"
     },
     {
-      "fullname": "KCS"
+      "abbr": "KCS"
     },
     {
       "fullname": "Maker"
     },
     {
-      "fullname": "MKR"
+      "abbr": "MKR"
     },
     {
       "fullname": "EOS"
     },
     {
+      "abbr": "EOS"
+    },
+    {
       "fullname": "Zcash"
     },
     {
-      "fullname": "ZEC"
+      "abbr": "ZEC"
     },
     {
       "fullname": "Pax Dollar"
     },
     {
-      "fullname": "USDP"
+      "abbr": "USDP"
     },
     {
       "fullname": "Aave"
     },
     {
-      "fullname": "AAVE"
+      "abbr": "AAVE"
     },
     {
       "fullname": "Huobi Token"
     },
     {
-      "fullname": "HT"
+      "abbr": "HT"
     },
     {
       "fullname": "IOTA"
     },
     {
-      "fullname": "MIOTA"
+      "abbr": "MIOTA"
     },
     {
       "fullname": "BitTorrent-New"
     },
     {
-      "fullname": "BTT"
+      "abbr": "BTT"
     },
     {
       "fullname": "Neutrino USD"
     },
     {
-      "fullname": "USDN"
+      "abbr": "USDN"
     },
     {
       "fullname": "eCash"
     },
     {
-      "fullname": "XEC"
+      "abbr": "XEC"
     },
     {
       "fullname": "The Graph"
     },
     {
-      "fullname": "GRT"
+      "abbr": "GRT"
     },
     {
       "fullname": "OKB"
     },
     {
-      "fullname": "OKB"
+      "abbr": "OKB"
     },
     {
       "fullname": "Quant"
     },
     {
-      "fullname": "QNT"
+      "abbr": "QNT"
     },
     {
       "fullname": "USDD"
     },
     {
-      "fullname": "USDD"
+      "abbr": "USDD"
     },
     {
       "fullname": "Klaytn"
     },
     {
-      "fullname": "KLAY"
+      "abbr": "KLAY"
     },
     {
       "fullname": "Fantom"
     },
     {
-      "fullname": "FTM"
+      "abbr": "FTM"
     },
     {
       "fullname": "THORChain"
     },
     {
-      "fullname": "RUNE"
+      "abbr": "RUNE"
     },
     {
       "fullname": "Neo"
     },
     {
-      "fullname": "NEO"
+      "abbr": "NEO"
     },
     {
       "fullname": "Waves"
     },
     {
-      "fullname": "WAVES"
+      "abbr": "WAVES"
     },
     {
       "fullname": "Chiliz"
     },
     {
-      "fullname": "CHZ"
+      "abbr": "CHZ"
     },
     {
       "fullname": "Stacks"
     },
     {
-      "fullname": "STX"
+      "abbr": "STX"
     },
     {
       "fullname": "PAX Gold"
     },
     {
-      "fullname": "PAXG"
+      "abbr": "PAXG"
     },
     {
       "fullname": "Basic Attention Token"
     },
     {
-      "fullname": "BAT"
+      "abbr": "BAT"
     },
     {
       "fullname": "Zilliqa"
     },
     {
-      "fullname": "ZIL"
+      "abbr": "ZIL"
     },
     {
       "fullname": "STEPN"
     },
     {
-      "fullname": "GMT"
+      "abbr": "GMT"
     },
     {
       "fullname": "Loopring"
     },
     {
-      "fullname": "LRC"
+      "abbr": "LRC"
     },
     {
       "fullname": "Dash"
     },
     {
-      "fullname": "DASH"
+      "abbr": "DASH"
     },
     {
       "fullname": "Enjin Coin"
     },
     {
-      "fullname": "ENJ"
+      "abbr": "ENJ"
     },
     {
       "fullname": "PancakeSwap"
     },
     {
-      "fullname": "CAKE"
+      "abbr": "CAKE"
     },
     {
       "fullname": "Kusama"
     },
     {
-      "fullname": "KSM"
+      "abbr": "KSM"
     },
     {
       "fullname": "Fei USD"
     },
     {
-      "fullname": "FEI"
+      "abbr": "FEI"
     },
     {
       "fullname": "Gala"
     },
     {
-      "fullname": "GALA"
+      "abbr": "GALA"
     },
     {
       "fullname": "TerraClassicUSD"
     },
     {
-      "fullname": "USTC"
+      "abbr": "USTC"
     },
     {
       "fullname": "Celo"
     },
     {
-      "fullname": "CELO"
+      "abbr": "CELO"
     },
     {
       "fullname": "Kava"
     },
     {
-      "fullname": "KAVA"
+      "abbr": "KAVA"
     },
     {
       "fullname": "Curve DAO Token"
     },
     {
-      "fullname": "CRV"
+      "abbr": "CRV"
     },
     {
       "fullname": "Holo"
     },
     {
-      "fullname": "HOT"
+      "abbr": "HOT"
     },
     {
       "fullname": "Amp"
     },
     {
-      "fullname": "AMP"
+      "abbr": "AMP"
     },
     {
       "fullname": "Mina"
     },
     {
-      "fullname": "MINA"
+      "abbr": "MINA"
     },
     {
       "fullname": "Nexo"
     },
     {
-      "fullname": "NEXO"
+      "abbr": "NEXO"
     },
     {
       "fullname": "NEM"
     },
     {
-      "fullname": "XEM"
+      "abbr": "XEM"
     },
     {
       "fullname": "1inch Network"
     },
     {
-      "fullname": "1INCH"
+      "abbr": "1INCH"
     },
     {
       "fullname": "Decred"
     },
     {
-      "fullname": "DCR"
+      "abbr": "DCR"
     },
     {
       "fullname": "Compound"
     },
     {
-      "fullname": "COMP"
+      "abbr": "COMP"
     },
     {
       "fullname": "XDC Network"
     },
     {
-      "fullname": "XDC"
+      "abbr": "XDC"
     },
     {
       "fullname": "GateToken"
     },
     {
-      "fullname": "GT"
+      "abbr": "GT"
     },
     {
       "fullname": "Arweave"
     },
     {
-      "fullname": "AR"
+      "abbr": "AR"
     },
     {
       "fullname": "Symbol"
     },
     {
-      "fullname": "XYM"
+      "abbr": "XYM"
     },
     {
       "fullname": "Gnosis"
     },
     {
-      "fullname": "GNO"
+      "abbr": "GNO"
     },
     {
       "fullname": "Qtum"
     },
     {
-      "fullname": "QTUM"
+      "abbr": "QTUM"
     },
     {
       "fullname": "Storj"
     },
     {
-      "fullname": "STORJ"
+      "abbr": "STORJ"
     },
     {
       "fullname": "Synthetix"
     },
     {
-      "fullname": "SNX"
+      "abbr": "SNX"
     },
     {
       "fullname": "Kadena"
     },
     {
-      "fullname": "KDA"
+      "abbr": "KDA"
     },
     {
       "fullname": "BORA"
     },
     {
-      "fullname": "BORA"
+      "abbr": "BORA"
     }
   ]

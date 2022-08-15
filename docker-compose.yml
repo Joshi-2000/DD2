@@ -1,23 +1,11 @@
 services:
-  db:
-    image: postgres
-    container_name: db
+  api:
+    build: .
     restart: always
     ports:
-      - 5432:5432
-    environment:
-      POSTGRES_USER: pgsql
-      POSTGRES_PASSWORD: example
-    volumes:
-      - ./Database/:/var/lib/postgresql/data
-  adminer:
-    image: adminer
-    restart: always
+     - 8000:80
+  my-app:
+    build: react_js/.
     ports:
-      - 8080:8080
-  #app:
-   # build: .
-    #restart: always
-    #depends_on:
-    #  - db
-
+      - 3000:80
+    restart: always

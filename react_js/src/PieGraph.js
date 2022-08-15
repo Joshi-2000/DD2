@@ -56,7 +56,7 @@ class PieRechartComponent extends React.Component {
             <h1> Please wait some time.... </h1> </div> ;
         return (
             <>
-            <p class="headline-center">Market Capitalization</p>
+            <p className="headline-center">Market Capitalization</p>
             <ResponsiveContainer height={400} >
 
                 <PieChart width={730} height={300}>

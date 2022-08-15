@@ -18,8 +18,9 @@ const Button = styled.button`
   font-size: 16px;
   padding: 6px 25px;
   border-radius: 5px;
-  margin: 0px 5px 5px 0px;
+  margin: 8px 5px 5px 0px;
   cursor: pointer;
+  align-self: flex-end;
   &:disabled {
     color: grey;
     opacity: 0.7;
@@ -39,7 +40,7 @@ const ButtonToggle = styled(Button)`
 const ButtonGroup = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-end;
+  width: 100%;
 `;
 
 const types = ['Day', 'Week', 'Month', 'Year'];
@@ -47,15 +48,30 @@ const types = ['Day', 'Week', 'Month', 'Year'];
 const LineGraph = (props) => {
     const [data, setData] = useState(null);
     const [reData, setreData] = useState(null);
-    
+
+    const [varType, setVarType] = useState();
     const [active, setActive] = useState(types[1]);
 
     useEffect(() => {
         const fetchdData = async () => {
             const result = await fetch("http://localhost:8000" + props.reqPath);
             const jsonResult = await result.json();
+            setVarType(props.varType);
             if (Object.keys(jsonResult.data).length == 4){
-              setData(jsonResult.data.week);
+              
+              if(props.interval === "day"){
+                setData(jsonResult.data.day);
+                setActive(types[0]);
+              }
+              if(props.interval === "week"){
+                setData(jsonResult.data.week);
+                
+              }
+              if(props.interval === "month"){
+                setData(jsonResult.data.month);
+                setActive(types[2]);
+              } 
+
             }
             else{
               setData(jsonResult.data.tsd);
@@ -86,7 +102,11 @@ const LineGraph = (props) => {
     return (
         <div >
         <ButtonGroup>
-          <p class="headline">{reData.overview.displayed_str}</p>
+          <div className='headlineBox'>
+            <p className='varType'> {(props.title === "b" ? "Best 24h": props.title === "w" ? "Worst 24h": varType === "price" ? "price" : varType === "volume_24h" ? "24h volume": "market cap dominance")}</p>
+            <p className="headline">{reData.overview.displayed_str + " "}<span className="varType">{(props.title === "b" ? reData.overview.increase + "%" : props.title === "w" ? reData.overview.increase + "%": "")}</span></p>
+          </div>
+          <div style={{marginLeft: "auto"}}>
           {types.map(type => (
             <ButtonToggle
               key={type}
@@ -97,6 +117,7 @@ const LineGraph = (props) => {
             {type}
           </ButtonToggle>
           ))}
+          </div>
         </ButtonGroup>
 
 
@@ -109,10 +130,10 @@ const LineGraph = (props) => {
                     </linearGradient>
                 </defs>
                 
-                <Area dataKey= "price" stroke="#00b497" fill='url(#color)' />
+                <Area dataKey= {varType} stroke="#00b497" fill='url(#color)' />
                 <XAxis minTickGap={20} dataKey="last_updated" tick={{fill: '#94A6A6', fontFamily: 'sans-serif'}} />
 
-                <YAxis dataKey= "price"  tick={{fill: '#94A6A6', fontFamily: 'sans-serif'}} domain={['auto', 'auto']} tickCount= {7} tickFormatter={(number) => `${(number + reData.overview.unit)}`}/>
+                <YAxis dataKey= {varType}  width={100} tick={{fill: '#94A6A6', fontFamily: 'sans-serif'}} domain={['auto', 'auto']} tickCount= {7} tickFormatter={(number) => `${(number + (varType === "price" ? "€" : varType === "volume_24h" ? "m": "%"))}`}/>
 
 
                 <Tooltip/>
@@ -126,7 +147,7 @@ const LineGraph = (props) => {
       return (
         <div >
         <ButtonGroup>
-          <p class="headline">{reData.overview.displayed_str}</p>
+          <p className="headline">{reData.overview.displayed_str}</p>
         </ButtonGroup>
 
         <ResponsiveContainer height={400} >

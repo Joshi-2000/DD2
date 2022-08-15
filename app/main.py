@@ -36,19 +36,21 @@ def Overview(abbr: str = "all"):
         connPool.putconn(conn)
         return coin_dict
     else:
-        cur.execute("SELECT * FROM Cryptocurrency WHERE symbol = %s", (abbr,))
-        coinData = cur.fetchall()[0]
-        connPool.putconn(conn)
+        cur.execute("SELECT cryptocurrency.crypto_id, cryptocurrency.name, cryptocurrency.date_added, cryptocurrency.max_supply, crypto_tsd.last_updated, crypto_tsd.price, crypto_tsd.volume_24h, crypto_tsd.market_cap_dominance, crypto_tsd.circulating_supply FROM crypto_tsd INNER JOIN cryptocurrency ON crypto_tsd.crypto_id = cryptocurrency.crypto_id WHERE cryptocurrency.symbol = %s AND crypto_tsd.last_updated >= NOW() - '1 day'::INTERVAL ORDER BY crypto_tsd.last_updated LIMIT 1", (abbr,))
+        coinData = cur.fetchall()
         if len(coinData) == 0:
+            connPool.putconn(conn)
             raise HTTPException(status_code=404, detail="Abbreviation not found")
-        return  {"coin_id":coinData[5], "name":coinData[0], "date_added":coinData[2].isoformat(), "tags":[coinData[3]], "max_supply":[coinData[4]]}
+        connPool.putconn(conn)
+        coinData = coinData[0]
+        return  {"coin_id":coinData[0], "name":coinData[1], "date_added":coinData[2].isoformat(), "max_supply":coinData[3], "last_updated":coinData[4], "price":coinData[5], "volume_24h":coinData[6], "market_cap_dominance":coinData[7], "circulating_supply":coinData[8]}
     
 @app.get("/names")
 def Names():
     coin_dict = Overview("all")
     names_dict = {}
     for coin in coin_dict.keys():
-        names_dict[coin]=coin_dict[coin]["name"]
+        names_dict[coin_dict[coin]["name"]]=coin
     return names_dict
 
 @app.get("/datanames")
@@ -98,15 +100,15 @@ def Coin(abbr: str):
 
 
     for data in coinData["year"]:
-        newCoinData["year"].append({"last_updated": data[0].strftime("%d.%m.%Y"), "price":data[1], "volume_24h":data[2], "market_cap_dominance":data[3], "circulating_supply":data[4]})
+        newCoinData["year"].append({"last_updated": data[0].strftime("%d.%m.%Y"), "price":data[1], "volume_24h":round(data[2],-6)/1000000, "market_cap_dominance":round(data[3],3), "circulating_supply":data[4]})
 
     for data in coinData["month"]:
-        newCoinData["month"].append({"last_updated": data[0].strftime("%d.%m %H:%M"), "price":data[1], "volume_24h":data[2], "market_cap_dominance":data[3], "circulating_supply":data[4]})
+        newCoinData["month"].append({"last_updated": data[0].strftime("%d.%m %H:%M"), "price":data[1], "volume_24h":round(data[2],-6)/1000000, "market_cap_dominance":round(data[3],3), "circulating_supply":data[4]})
 
     for data in coinData["week"]:
-        newCoinData["week"].append({"last_updated": data[0].strftime("%d.%m %H:%M"), "price":data[1], "volume_24h":data[2], "market_cap_dominance":data[3], "circulating_supply":data[4]})
+        newCoinData["week"].append({"last_updated": data[0].strftime("%d.%m %H:%M"), "price":data[1], "volume_24h":round(data[2],-6)/1000000, "market_cap_dominance":round(data[3],3), "circulating_supply":data[4]})
     for data in coinData["day"]:
-        newCoinData["day"].append({"last_updated": data[0].strftime("%d.%m %H:%M"), "price":data[1], "volume_24h":data[2], "market_cap_dominance":data[3], "circulating_supply":data[4]})
+        newCoinData["day"].append({"last_updated": data[0].strftime("%d.%m %H:%M"), "price":data[1], "volume_24h":round(data[2],-6)/1000000, "market_cap_dominance":round(data[3],3), "circulating_supply":data[4]})
     return {"overview": {"symbol": abbr, "name": name, "displayed_str": name + " - " + abbr,  "unit": "€"} ,"data":newCoinData}
 
 @app.get("/MarketCap")
@@ -152,9 +154,11 @@ def BestCoin():
     connPool.putconn(conn)
     max = [0,""]
     for i in range(len(newData)):
-        increase = sorted_new[i][1]/sorted_old[i][1]
-        if increase > max[0]:
-            max = [increase, sorted_new[i][0]]
+        for j in range(len(oldData)):
+            if sorted_new[i][0] == sorted_old[j][0]:
+                increase = sorted_new[i][1]/sorted_old[j][1]
+                if increase > max[0]:
+                    max = [increase, sorted_new[i][0]]
     response = Coin(max[1])
     response["overview"]["increase"] = round((max[0] -1) *100,2)
     return response
@@ -172,9 +176,11 @@ def WorstCoin():
     connPool.putconn(conn)
     min = [2,""]
     for i in range(len(newData)):
-        increase = sorted_new[i][1]/sorted_old[i][1]
-        if increase < min[0]:
-            min = [increase, sorted_new[i][0]]
+        for j in range(len(oldData)):
+            if sorted_new[i][0] == sorted_old[j][0]:
+                increase = sorted_new[i][1]/sorted_old[j][1]
+                if increase < min[0]:
+                    min = [increase, sorted_new[i][0]]
     response = Coin(min[1])
     response["overview"]["increase"] = round((min[0] -1) *100,2)
     return response
