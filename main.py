@@ -1,3 +1,4 @@
+from sqlite3 import Cursor
 from fastapi import FastAPI, HTTPException
 import psycopg
 from psycopg_pool import ConnectionPool
@@ -20,7 +21,7 @@ app.add_middleware(
 )
 
 
-connPool = ConnectionPool(conninfo= "host=87.146.94.122 dbname=Crypto user=pgsql password=example")
+connPool = ConnectionPool(conninfo= "host=84.187.49.138 dbname=Crypto user=pgsql password=example")
 
 @app.get("/Overview/")
 def Overview(abbr: str = "all"):
@@ -62,38 +63,51 @@ def Datanames():
 
 #last_updated, price, volume_24h, market_cap_dominance, circulating_supply
 
-@app.get("/Coin/{interval}/{abbr}")
-def Coin(abbr: str, interval: str):
+@app.get("/Coin/{abbr}")
+def Coin(abbr: str):
     conn = connPool.getconn()
     cur = conn.cursor()
     cur.execute("SELECT name FROM cryptocurrency WHERE symbol = %s ", (abbr,))
-    name = cur.fetchall()[0][0]
-    if interval == "d":
-        cur.execute("SELECT crypto_tsd.last_updated, crypto_tsd.price, crypto_tsd.volume_24h, crypto_tsd.market_cap_dominance, crypto_tsd.circulating_supply FROM crypto_tsd INNER JOIN cryptocurrency ON crypto_tsd.crypto_id = Cryptocurrency.crypto_id WHERE Cryptocurrency.symbol = %s AND crypto_tsd.last_updated >= NOW() - '1 day'::INTERVAL ORDER BY crypto_tsd.last_updated", (abbr,))
-    elif interval == "w":
-        cur.execute("SELECT DATE_TRUNC('hour', crypto_tsd.last_updated) AS date, AVG(crypto_tsd.price) as avg_price, AVG(crypto_tsd.volume_24h) AS avg_volume_24h, AVG(crypto_tsd.market_cap_dominance) AS avg_market_cap_dominance, AVG(crypto_tsd.circulating_supply) AS avg_circulating_supply FROM crypto_tsd INNER JOIN cryptocurrency ON crypto_tsd.crypto_id = Cryptocurrency.crypto_id WHERE Cryptocurrency.symbol = %s AND crypto_tsd.last_updated >= NOW() - '7 day'::INTERVAL  GROUP BY DATE_TRUNC('hour', crypto_tsd.last_updated) ORDER BY date ", (abbr,))
-    elif interval == "m":
-        cur.execute("SELECT DATE_TRUNC('hour', crypto_tsd.last_updated) AS date, AVG(crypto_tsd.price) as avg_price, AVG(crypto_tsd.volume_24h) AS avg_volume_24h, AVG(crypto_tsd.market_cap_dominance) AS avg_market_cap_dominance, AVG(crypto_tsd.circulating_supply) AS avg_circulating_supply FROM crypto_tsd INNER JOIN cryptocurrency ON crypto_tsd.crypto_id = Cryptocurrency.crypto_id WHERE Cryptocurrency.symbol = %s AND crypto_tsd.last_updated >= NOW() - '30 day'::INTERVAL  GROUP BY DATE_TRUNC('hour', crypto_tsd.last_updated) ORDER BY date ", (abbr,))
-    elif interval == "y":
-        cur.execute("SELECT DATE_TRUNC('day', crypto_tsd.last_updated) AS date, AVG(crypto_tsd.price) as avg_price, AVG(crypto_tsd.volume_24h) AS avg_volume_24h, AVG(crypto_tsd.market_cap_dominance) AS avg_market_cap_dominance, AVG(crypto_tsd.circulating_supply) AS avg_circulating_supply FROM crypto_tsd INNER JOIN cryptocurrency ON crypto_tsd.crypto_id = Cryptocurrency.crypto_id WHERE Cryptocurrency.symbol = %s AND crypto_tsd.last_updated >= NOW() - '365 day'::INTERVAL GROUP BY DATE_TRUNC('day', crypto_tsd.last_updated) ORDER BY date ", (abbr,))
-    else:
+    try:
+        name = cur.fetchall()[0][0]
+    except:
         connPool.putconn(conn)
-        raise HTTPException(status_code=404, detail="given interval not found")
-    coinData = cur.fetchall()
-    connPool.putconn(conn)
-    if len(coinData) == 0:
         raise HTTPException(status_code=404, detail="Abbreviation not found")
-    coin_list = []
-    if interval == "y":
-        for data in coinData:
-            coin_list.append({"last_updated": data[0].strftime("%d.%m.%Y"), "price":data[1], "volume_24h":data[2], "market_cap_dominance":data[3], "circulating_supply":data[4]})
-    if interval == "m" or interval == "w":
-        for data in coinData:
-            coin_list.append({"last_updated": data[0].strftime("%d.%m %H:%M"), "price":data[1], "volume_24h":data[2], "market_cap_dominance":data[3], "circulating_supply":data[4]})
-    if interval == "d":
-        for data in coinData:
-            coin_list.append({"last_updated": data[0].strftime("%d.%m %H:%M"), "price":data[1], "volume_24h":data[2], "market_cap_dominance":data[3], "circulating_supply":data[4]})
-    return {"overview": {"symbol": abbr, "name": name} ,"data":coin_list}
+    
+    coinData = {}
+    
+    cur.execute("SELECT crypto_tsd.last_updated, crypto_tsd.price, crypto_tsd.volume_24h, crypto_tsd.market_cap_dominance, crypto_tsd.circulating_supply FROM crypto_tsd INNER JOIN cryptocurrency ON crypto_tsd.crypto_id = Cryptocurrency.crypto_id WHERE Cryptocurrency.symbol = %s AND crypto_tsd.last_updated >= NOW() - '1 day'::INTERVAL ORDER BY crypto_tsd.last_updated", (abbr,))
+    coinData["day"] = cur.fetchall()
+
+    cur.execute("SELECT DATE_TRUNC('hour', crypto_tsd.last_updated) AS date, AVG(crypto_tsd.price) as avg_price, AVG(crypto_tsd.volume_24h) AS avg_volume_24h, AVG(crypto_tsd.market_cap_dominance) AS avg_market_cap_dominance, AVG(crypto_tsd.circulating_supply) AS avg_circulating_supply FROM crypto_tsd INNER JOIN cryptocurrency ON crypto_tsd.crypto_id = Cryptocurrency.crypto_id WHERE Cryptocurrency.symbol = %s AND crypto_tsd.last_updated >= NOW() - '7 day'::INTERVAL  GROUP BY DATE_TRUNC('hour', crypto_tsd.last_updated) ORDER BY date ", (abbr,))
+    coinData["week"] = cur.fetchall()
+    
+    cur.execute("SELECT DATE_TRUNC('hour', crypto_tsd.last_updated) AS date, AVG(crypto_tsd.price) as avg_price, AVG(crypto_tsd.volume_24h) AS avg_volume_24h, AVG(crypto_tsd.market_cap_dominance) AS avg_market_cap_dominance, AVG(crypto_tsd.circulating_supply) AS avg_circulating_supply FROM crypto_tsd INNER JOIN cryptocurrency ON crypto_tsd.crypto_id = Cryptocurrency.crypto_id WHERE Cryptocurrency.symbol = %s AND crypto_tsd.last_updated >= NOW() - '30 day'::INTERVAL  GROUP BY DATE_TRUNC('hour', crypto_tsd.last_updated) ORDER BY date ", (abbr,))
+    coinData["month"] = cur.fetchall()
+    
+    cur.execute("SELECT DATE_TRUNC('day', crypto_tsd.last_updated) AS date, AVG(crypto_tsd.price) as avg_price, AVG(crypto_tsd.volume_24h) AS avg_volume_24h, AVG(crypto_tsd.market_cap_dominance) AS avg_market_cap_dominance, AVG(crypto_tsd.circulating_supply) AS avg_circulating_supply FROM crypto_tsd INNER JOIN cryptocurrency ON crypto_tsd.crypto_id = Cryptocurrency.crypto_id WHERE Cryptocurrency.symbol = %s AND crypto_tsd.last_updated >= NOW() - '365 day'::INTERVAL GROUP BY DATE_TRUNC('day', crypto_tsd.last_updated) ORDER BY date ", (abbr,))
+    coinData["year"] = cur.fetchall()
+    
+    connPool.putconn(conn)
+    
+    newCoinData= {}
+    newCoinData["day"] = []
+    newCoinData["week"] = []
+    newCoinData["month"] = []
+    newCoinData["year"] = []
+
+
+    for data in coinData["year"]:
+        newCoinData["year"].append({"last_updated": data[0].strftime("%d.%m.%Y"), "price":data[1], "volume_24h":data[2], "market_cap_dominance":data[3], "circulating_supply":data[4]})
+
+    for data in coinData["month"]:
+        newCoinData["month"].append({"last_updated": data[0].strftime("%d.%m %H:%M"), "price":data[1], "volume_24h":data[2], "market_cap_dominance":data[3], "circulating_supply":data[4]})
+
+    for data in coinData["week"]:
+        newCoinData["week"].append({"last_updated": data[0].strftime("%d.%m %H:%M"), "price":data[1], "volume_24h":data[2], "market_cap_dominance":data[3], "circulating_supply":data[4]})
+    for data in coinData["day"]:
+        newCoinData["day"].append({"last_updated": data[0].strftime("%d.%m %H:%M"), "price":data[1], "volume_24h":data[2], "market_cap_dominance":data[3], "circulating_supply":data[4]})
+    return {"overview": {"symbol": abbr, "name": name, "displayed_str": name + " - " + abbr,  "unit": "€"} ,"data":newCoinData}
 
 @app.get("/MarketCap")
 def MarketCap():
@@ -121,8 +135,9 @@ def OverallMarketCap():
     connPool.putconn(conn)
     cap_list = []
     for cap in capData:
-        cap_list.append({"last_updated":cap[0].strftime("%d.%m.%Y"), "market_cap":round(cap[1],-9)/(1*10**9)})
-    return cap_list
+        cap_list.append({"last_updated":cap[0].strftime("%d.%m.%Y"), "value":round(cap[1],-9)/(1*10**9)})
+    cap_dic = {"overview": {"displayed_str": "Overall Market Cap", "unit": "bn€"}, "data": {"tsd": cap_list}}
+    return cap_dic
 
 @app.get("/BestCoin")
 def BestCoin():
@@ -140,7 +155,7 @@ def BestCoin():
         increase = sorted_new[i][1]/sorted_old[i][1]
         if increase > max[0]:
             max = [increase, sorted_new[i][0]]
-    response = Coin(max[1], "d")
+    response = Coin(max[1])
     response["overview"]["increase"] = round((max[0] -1) *100,2)
     return response
 
@@ -160,7 +175,7 @@ def WorstCoin():
         increase = sorted_new[i][1]/sorted_old[i][1]
         if increase < min[0]:
             min = [increase, sorted_new[i][0]]
-    response = Coin(min[1], "d")
+    response = Coin(min[1])
     response["overview"]["increase"] = round((min[0] -1) *100,2)
     return response
 
