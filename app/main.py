@@ -4,6 +4,7 @@ import psycopg
 from psycopg_pool import ConnectionPool
 import json
 from fastapi.middleware.cors import CORSMiddleware
+from datetime import timedelta
 
 app = FastAPI()
 
@@ -43,7 +44,7 @@ def Overview(abbr: str = "all"):
             raise HTTPException(status_code=404, detail="Abbreviation not found")
         connPool.putconn(conn)
         coinData = coinData[0]
-        return  {"coin_id":coinData[0], "name":coinData[1], "date_added":coinData[2].isoformat(), "max_supply":coinData[3], "last_updated":coinData[4], "price":round(coinData[5],12), "volume_24h":coinData[6], "market_cap_dominance":coinData[7], "circulating_supply":coinData[8]}
+        return  {"coin_id":coinData[0], "name":coinData[1], "date_added":coinData[2].isoformat(), "max_supply":coinData[3], "last_updated":coinData[4] + timedelta(hours=2), "price":round(coinData[5],12), "volume_24h":coinData[6], "market_cap_dominance":coinData[7], "circulating_supply":coinData[8]}
     
 @app.get("/names")
 def Names():
@@ -100,15 +101,15 @@ def Coin(abbr: str):
 
 
     for data in coinData["year"]:
-        newCoinData["year"].append({"last_updated": data[0].strftime("%d.%m.%Y"), "price":data[1], "volume_24h":round(data[2],-6)/1000000, "market_cap_dominance":round(data[3],3), "circulating_supply":data[4]})
+        newCoinData["year"].append({"last_updated": (data[0] + timedelta(hours=2)).strftime("%d.%m.%Y"), "price":data[1], "volume_24h":round(data[2],-6)/1000000, "market_cap_dominance":round(data[3],3), "circulating_supply":data[4]})
 
     for data in coinData["month"]:
-        newCoinData["month"].append({"last_updated": data[0].strftime("%d.%m %H:%M"), "price":data[1], "volume_24h":round(data[2],-6)/1000000, "market_cap_dominance":round(data[3],3), "circulating_supply":data[4]})
+        newCoinData["month"].append({"last_updated":  (data[0] + timedelta(hours=2)).strftime("%d.%m %H:%M"), "price":data[1], "volume_24h":round(data[2],-6)/1000000, "market_cap_dominance":round(data[3],3), "circulating_supply":data[4]})
 
     for data in coinData["week"]:
-        newCoinData["week"].append({"last_updated": data[0].strftime("%d.%m %H:%M"), "price":data[1], "volume_24h":round(data[2],-6)/1000000, "market_cap_dominance":round(data[3],3), "circulating_supply":data[4]})
+        newCoinData["week"].append({"last_updated":  (data[0] + timedelta(hours=2)).strftime("%d.%m %H:%M"), "price":data[1], "volume_24h":round(data[2],-6)/1000000, "market_cap_dominance":round(data[3],3), "circulating_supply":data[4]})
     for data in coinData["day"]:
-        newCoinData["day"].append({"last_updated": data[0].strftime("%d.%m %H:%M"), "price":data[1], "volume_24h":round(data[2],-6)/1000000, "market_cap_dominance":round(data[3],3), "circulating_supply":data[4]})
+        newCoinData["day"].append({"last_updated":  (data[0] + timedelta(hours=2)).strftime("%d.%m %H:%M"), "price":data[1], "volume_24h":round(data[2],-6)/1000000, "market_cap_dominance":round(data[3],3), "circulating_supply":data[4]})
     return {"overview": {"symbol": abbr, "name": name, "displayed_str": name + " - " + abbr,  "unit": "€"} ,"data":newCoinData}
 
 @app.get("/MarketCap")
@@ -137,7 +138,7 @@ def OverallMarketCap():
     connPool.putconn(conn)
     cap_list = []
     for cap in capData:
-        cap_list.append({"last_updated":cap[0].strftime("%d.%m.%Y"), "value":round(cap[1],-9)/(1*10**9)})
+        cap_list.append({"last_updated":(cap[0] + timedelta(hours=2)).strftime("%d.%m.%Y"), "value":round(cap[1],-9)/(1*10**9)})
     cap_dic = {"overview": {"displayed_str": "Overall Market Cap", "unit": "bn€"}, "data": {"tsd": cap_list}}
     return cap_dic
 

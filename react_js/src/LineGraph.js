@@ -57,8 +57,11 @@ const LineGraph = (props) => {
             const result = await fetch("http://localhost:8000" + props.reqPath);
             const jsonResult = await result.json();
             setVarType(props.varType);
-            if (Object.keys(jsonResult.data).length == 4){
-              
+            console.log(jsonResult);
+            if (jsonResult.detail === "Abbreviation not found"){
+              setData("Error");
+            }
+            else if (Object.keys(jsonResult.data).length == 4){
               if(props.interval === "day"){
                 setData(jsonResult.data.day);
                 setActive(types[0]);
@@ -71,7 +74,6 @@ const LineGraph = (props) => {
                 setData(jsonResult.data.month);
                 setActive(types[2]);
               } 
-
             }
             else{
               setData(jsonResult.data.tsd);
@@ -98,6 +100,8 @@ const LineGraph = (props) => {
     }
     if (data == undefined) return <div>
             <h1> Please wait some time.... </h1> </div> ;
+    if (data === "Error") return <div>
+            <h1> Cryptocurrency not found </h1> </div> ;
     if(Object.keys(reData.data).length == 4){
     return (
         <div >

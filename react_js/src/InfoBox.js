@@ -8,17 +8,23 @@ export default function InfoBox(props) {
         const fetchdData = async () => {
             const result = await fetch("http://localhost:8000/Overview/?abbr=" + props.coin);
             const jsonResult = await result.json();
-            console.log(jsonResult.max_supply);
-            if (jsonResult.max_supply == null){
-                jsonResult.max_supply = "infinite"
+            if (jsonResult.detail === "Abbreviation not found"){
+                setinfoData("Error");
             }
-            setinfoData(jsonResult);
+            else{
+                if (jsonResult.max_supply == null){
+                jsonResult.max_supply = "infinite"
+                }
+                setinfoData(jsonResult);
+            }
         }
         fetchdData();
         }, [])
 
     if (infoData == undefined) return <div>
         <h1> Please wait some time.... </h1> </div> ;
+    if (infoData === "Error") return <div>
+        <h1> Cryptocurrency not found </h1> </div> ;
     return (
         <>
         <p className='headline-center'> General information </p>
