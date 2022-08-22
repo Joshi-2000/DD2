@@ -1,6 +1,6 @@
 # Auswertung Kryptowährungen 
 
-Diese Applikation ist im Rahmen des Moduls Datenerfassung und Datenhaltung 2 an der THW-OWL im SS 2022 entstanden.
+Diese Applikation ist im Rahmen des Moduls Datenerfassung und Datenhaltung 2 an der [TH-OWL](https://www.th-owl.de/) im Sommersemester 2022 entstanden.
 
 ## Live-Version
 
