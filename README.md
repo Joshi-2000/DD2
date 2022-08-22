@@ -23,7 +23,7 @@ Hierbei werden folgende Services auf den entsprechenden Ports gestartet:
 | Adminer   | 8080 |
 | Fetcher   | -    |
 
-So kann z.B. Admine über die URL [localhost:8080](http://localhost:8080/) aufgerufen werden 
+So kann z.B. Adminer über die URL [localhost:8080](http://localhost:8080/) aufgerufen werden.
 
 Die Datenbank beinhaltet dabei lediglich die Daten der Top 100 Kryptowährungen und erhält über den Fetcher Zeitreihen-Daten alle 5 Minuten.  
 
