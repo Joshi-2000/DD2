@@ -1,14 +1,14 @@
 services:
-  # api:
-  #   build: .
-  #   restart: always
-  #   ports:
-  #    - 8000:80
-  # my-app:
-  #   build: react_js/.
-  #   ports:
-  #     - 3000:80
-  #   restart: always
+  api:
+    build: .
+    restart: always
+    ports:
+     - 8000:80
+  my-app:
+    build: react_js/.
+    ports:
+      - 3000:80
+    restart: always
   db:
     image: postgres
     container_name: db
