@@ -4,7 +4,7 @@ Diese Applikation ist im Rahmen des Moduls Datenerfassung und Datenhaltung 2 an 
 
 ## Live-Version
 
-Die Website kann Live unter [henjes.net](www.henjes.net) gefunden werden.
+Die Website kann Live unter [henjes.net](http://henjes.net/) gefunden werden.
 
 ## Lokal starten
 
@@ -13,17 +13,21 @@ Sofern die Applikation lokal gestartet werden soll, kann dies mithilfe von docke
 ```bash
 docker-compose up
 ```
-Hierbei werden folgende Services gestartet:  
+Hierbei werden folgende Services auf den entsprechenden Ports gestartet:  
 
-- Datenbank
-- Backend
-- Frontend
-- Adminer
-- Fetcher
+| Service   | Port |
+|-----------|------|
+| Datenbank | 5432 |
+| Backend   | 8000 |
+| Frontend  | 80   |
+| Adminer   | 8080 |
+| Fetcher   | -    |
 
-Die Datenbank beinhaltet dabei lediglich die Daten der Top 100 Kryptowährungen und erhält über den Fetcher Time Series Daten alle 5 Minuten.  
+So kann z.B. Admine über die URL [localhost:8080](http://localhost:8080/) aufgerufen werden 
 
-Das Frontend und Backend jedoch greifen auch bei der Lokal gestarteten Applikation auf die Datenbank, welche auf dem Server zu, da dieser weitaus mehr Daten bereitstellen kann.
+Die Datenbank beinhaltet dabei lediglich die Daten der Top 100 Kryptowährungen und erhält über den Fetcher Zeitreihen-Daten alle 5 Minuten.  
+
+Das Frontend und Backend jedoch greifen auch bei der lokal gestarteten Applikation auf die Datenbank, welche auf dem Server liegt, zu, da dieser weitaus mehr Daten bereitstellen kann.
 
 
 
