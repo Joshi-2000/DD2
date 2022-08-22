@@ -9,3 +9,19 @@ services:
     ports:
       - 3000:80
     restart: always
+  db:
+    image: postgres
+    container_name: db
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: pgsql
+      POSTGRES_PASSWORD: example
+    volumes:
+      - ./Database/:/var/lib/postgresql/data
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
