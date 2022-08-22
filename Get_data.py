@@ -8,8 +8,8 @@ time.sleep(10)
 
 conn = psycopg.connect(
     host="db",
-    dbname="Crypto",
-    user="pgsql",
+    dbname="crypto",
+    user="crypto",
     password="example")
 
 cur = conn.cursor()
