@@ -22,7 +22,7 @@ app.add_middleware(
 )
 
 
-connPool = ConnectionPool(conninfo= "host=84.187.49.138 dbname=Crypto user=pgsql password=example")
+connPool = ConnectionPool(conninfo= "host=henjes.net dbname=Crypto user=pgsql password=example")
 
 @app.get("/Overview/")
 def Overview(abbr: str = "all"):
@@ -44,7 +44,7 @@ def Overview(abbr: str = "all"):
             raise HTTPException(status_code=404, detail="Abbreviation not found")
         connPool.putconn(conn)
         coinData = coinData[0]
-        return  {"coin_id":coinData[0], "name":coinData[1], "date_added":coinData[2].isoformat(), "max_supply":coinData[3], "last_updated":coinData[4] + timedelta(hours=2), "price":round(coinData[5],12), "volume_24h":coinData[6], "market_cap_dominance":coinData[7], "circulating_supply":coinData[8]}
+        return  {"coin_id":coinData[0], "name":coinData[1], "date_added":coinData[2].isoformat(), "max_supply":coinData[3], "last_updated":coinData[4] + timedelta(hours=2), "price":round(coinData[5],12), "volume_24h":coinData[6], "market_cap_dominance":coinData[7], "circulating_supply":round(coinData[8],0)}
     
 @app.get("/names")
 def Names():

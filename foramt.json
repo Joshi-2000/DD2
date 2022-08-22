@@ -1,1 +1,12 @@
-cur.execute("SELECT crypto_tsd.last_updated, crypto_tsd.price, crypto_tsd.volume_24h, crypto_tsd.market_cap_dominance, crypto_tsd.circulating_supply FROM crypto_tsd INNER JOIN cryptocurrency ON crypto_tsd.crypto_id = Cryptocurrency.crypto_id WHERE Cryptocurrency.symbol = %s ORDER BY crypto_tsd.last_updated", (abbr,))
+{
+    "coin_id": 69,
+    "name": "Bitcoin",
+    "date_added": "2013-04-28",
+    "max_supply": 21000000,
+    "last_updated": "2022-08-21T08:12:00",
+    "price": 21145.45459154723,
+    "volume_24h": 25180609000,
+    "market_cap_dominance": 40.1157,
+    "circulating_supply": 19127493
+}
+
