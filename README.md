@@ -8,7 +8,7 @@ Die Website kann Live unter [henjes.net](http://henjes.net/) gefunden werden.
 
 ## Lokal starten
 
-Sofern die Applikation lokal gestartet werden soll, kann dies mithilfe von docker-compose getan werden. 
+Sofern die Applikation lokal gestartet werden soll, kann dies mithilfe von [docker-compose](https://docs.docker.com/desktop/install/windows-install/) getan werden. 
 
 ```bash
 docker-compose up
